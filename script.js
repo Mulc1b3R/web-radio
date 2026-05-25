@@ -1,46 +1,48 @@
 const audioPlayer = document.getElementById('audioPlayer');
 const trackInfo = document.getElementById('trackInfo');
 
-let mp3Files = [];  // Array to store MP3 URLs
-let playedIndices = [];  // Array to store already played indices
+let mp3Files = [];  // Array to store MP3 URLs from load.json
 
-// Shuffle the array so that each file is played once before repetition
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-// Function to load and play the next track
-async function playNextTrack() {
+// Function to pull a pure random link out of the database array instantly
+async function playPureRandomTrack() {
+    // 1. Initial data fetch check if the master list is empty
     if (mp3Files.length === 0) {
         try {
+            console.log('📡 Fetching transmission manifest array from load.json...');
             const response = await fetch('load.json');
             const data = await response.json();
-            mp3Files = shuffleArray(data.mp3s.slice());
+            mp3Files = data.mp3s.slice();
+            console.log(`📦 Broadcast matrix live: ${mp3Files.length} remote links available for random select.`);
         } catch (error) {
-            console.error('Error loading MP3 files:', error);
+            console.error('❌ Error loading transmission node manifest:', error);
+            trackInfo.textContent = 'Connection Error: Unable to read database configuration.';
             return;
         }
     }
 
-    let nextIndex;
-    do {
-        nextIndex = Math.floor(Math.random() * mp3Files.length);
-    } while (playedIndices.includes(nextIndex))
+    // 2. Pure Random Selection: No tracking arrays, no blocking loop cycles
+    // Pick an integer between 0 and 381 instantly on every execution event
+    const randomIndex = Math.floor(Math.random() * mp3Files.length);
+    const targetTrackUrl = mp3Files[randomIndex];
 
-    audioPlayer.src = mp3Files[nextIndex];
-    trackInfo.textContent = 'Now playing: ' + mp3Files[nextIndex];
+    // Clean up the long Archive.org folder URL strings for a clean dashboard display
+    const decodedUrl = decodeURIComponent(targetTrackUrl);
+    const rawFileName = decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1);
 
-    playedIndices.push(nextIndex);
+    // 3. Commit link parameters straight to the HTML5 audio layer
+    audioPlayer.src = targetTrackUrl;
+    trackInfo.textContent = 'Now playing: ' + rawFileName;
 
-    audioPlayer.play();  // Play the current track
+    console.log(`📡 Random Stream Triggered [Track Index: ${randomIndex}]: ${rawFileName}`);
 
-    // Add event listener for the end of the track to play the next track
-    audioPlayer.addEventListener('ended', playNextTrack);
+    // 4. Fire the playback mechanism
+    try {
+        await audioPlayer.play();
+    } catch (playError) {
+        console.warn('⚠️ Playback delayed. Awaiting manual trigger event.');
+    }
 }
 
-// Add an event listener to play the first track when the play button is clicked
-document.getElementById('playButton').addEventListener('click', playNextTrack);
+// Bind master event handlers to handle instant random selection loops
+document.getElementById('playButton').addEventListener('click', playPureRandomTrack);
+audioPlayer.addEventListener('ended', playPureRandomTrack);
