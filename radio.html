@@ -4,70 +4,118 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<style>
-
-      body {
-			background:black;
-		    color: white;
-      }
-	  @keyframes marquee {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        .marquee {
-            white-space: nowrap;
+    <title>Section 23 // Pirate Radio Terminal</title>
+    <style>
+        /* Phosphor Terminal Grid Layout Matrix */
+        body {
+            background-color: #000000;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px #33ff33;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             overflow: hidden;
-            animation: marquee 5s linear infinite;
         }
-</style>
-    <title>Psico Web radio...</title>
+
+        .crt-chassis {
+            border: 2px solid #33ff33;
+            background: rgba(0, 15, 0, 0.9);
+            box-shadow: 0 0 20px #005500, inset 0 0 15px #003300;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* 1990s Arcade Tactile Push Button Style */
+        .power-switch {
+            background: #000000;
+            border: 2px solid #33ff33;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 30px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #005500;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .power-switch:hover {
+            background: #33ff33;
+            color: #000000;
+            box-shadow: 0 0 20px #33ff33;
+        }
+
+        /* Responsive Dashboard text readout window */
+        #trackInfo {
+            font-size: 13px;
+            margin: 25px 0;
+            height: 60px;
+            overflow: hidden;
+            border: 1px solid #005500;
+            padding: 10px;
+            background: #000500;
+            border-radius: 4px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        /* HTML5 Native Component Coloring Overrides */
+        audio {
+            width: 100%;
+            margin-top: 15px;
+            filter: invert(1) hue-rotate(90deg) saturate(1.5); /* Forces standard players into green camo themes */
+        }
+
+        .terminal-specs {
+            font-size: 10px;
+            color: #008800;
+            margin-top: 25px;
+            text-shadow: none;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
+
+<div class="crt-chassis">
+    <h2>📡 SECTION 23 NODE</h2>
+    <p style="font-size: 11px; color: #00aa00;">AUTONOMOUS AUDIO SUBVERSION STREAM</p>
+    <br>
+    
+    <button id="playButton" class="power-switch">Connect Signal</button>
+    
+    <div id="trackInfo">Awaiting connection tracking initialization...</div>
+
+    <audio id="audioPlayer" controls></audio>
+
+    <div class="terminal-specs">
+        NODE ADDR: 0x63673528404C9B9394d4Ec6FA037ED825c8b0faa<br>
+        SYS STATUS: 382 LINKS HARVESTED // WEB 1.0 LEECHING LIVE<br>
+        Copyright © 2023 Psico Communications
+    </div>
+</div>
+
+<script src="script.js"></script>
+
 <script>
-        window.onload = function() {
-            let title = document.title;
-            let marqueeTitle = 'Live Broadcast... ' + title + ' ';  // Add your custom message
-
+    // Title scrolling animation tracking
+    window.onload = function() {
+        let marqueeTitle = '📡 Live Broadcast... Section 23 Operational ';
+        setInterval(() => {
+            marqueeTitle = marqueeTitle.substring(1) + marqueeTitle[0];
             document.title = marqueeTitle;
+        }, 200);
+    };
+</script>
 
-            let titleLength = marqueeTitle.length - 1;
-            let animatedTitle = marqueeTitle + ' '.repeat(titleLength);
-
-            document.title = animatedTitle;
-
-            // Ensure the title continues to scroll even when the tab is inactive
-            setInterval(() => {
-                animatedTitle = animatedTitle.substring(1) + animatedTitle[0];
-                document.title = animatedTitle;
-            }, 250);  // Change the interval for different scrolling speeds
-        };
-    </script>
-
-<center>
-    <h1>Psico Web Radio</h1>
-	<br>
-	<br>
- <img src="radio.jpg" alt="desc">
-   <br>
-    <button id="playButton">On</button>
-    <p id="trackInfo"></p>
-
-    <audio id="audioPlayer" controls>
-        Your browser does not support the <code>audio</code> element.
-    </audio>
-
-    <script src="script.js"></script>
-	  <br>
-	   <br>
-metamask address ; 0x63673528404C9B9394d4Ec6FA037ED825c8b0faa
-  <br><br>
-  Copyright © 2023 Psico Communications and Blockchain Development.
-  </center>
-  <br><br>
 </body>
 </html>
